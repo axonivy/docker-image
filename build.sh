@@ -4,7 +4,7 @@
 buildContext() {
   version=$1
   if [ $version == "dev" ] || [ $version == "nightly" ] || [ $version == "sprint" ] || [ $version == "latest" ]; then
-    echo "8.0"
+    echo "9"
   else
     echo $version
   fi
