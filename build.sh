@@ -3,8 +3,10 @@
 # build context directory based on the given version to build
 buildContext() {
   version=$1
-  if [ $version == "dev" ] || [ $version == "nightly" ] || [ $version == "sprint" ] || [ $version == "latest" ]; then
+  if [ $version == "dev" ] || [ $version == "nightly" ] || [ $version == "sprint" ] ]; then
     echo "9"
+  elif [ $version == "latest" ]; then
+    echo "8" # as soon as we release 9.1 officially, we need to set this to 9
   else
     echo $version
   fi
