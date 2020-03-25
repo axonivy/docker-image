@@ -3,33 +3,41 @@
 # build context directory based on the given version to build
 buildContext() {
   version=$1
-  if [ $version == "dev" ] || [ $version == "nightly" ] || [ $version == "sprint" ]; then
+  if [ $version == "8.0" ]; then
+    echo "8.0"
+  else # when version = dev|nightly|sprint|9|9.1|9.2|9.x
     echo "9"
-  elif [ $version == "latest" ]; then
-    echo "8.0" # as soon as we release 9.1 officially, we need to set this to 9
-  else
-    echo $version
   fi
 }
 
-# if this is a official release, cause of this an additional tag will made to the image
-isOfficialRelease() {
+# if its the current LTS, we add 'latest' tag
+isCurrentLTS() {
   version=$1
-  if [ $version == "8.0" ] || [ $version == "latest" ]; then
+  if [ $version == "8.0" ]; then
     echo "yes"
   else
     echo "no"
   fi
 }
 
-##########################################################################
+# if this is a official release, we add a 'version' tag (e.g. 8.0.3)
+isOfficialRelease() {
+  version=$1
+  if [ $version == "dev" ] || [ $version == "nightly" ] || [ $version == "sprint" ]; then
+    echo "no"
+  else
+    echo "yes"
+  fi
+}
+
+###########################################################################
 # build.sh
 #--------------------------------------------------------------------------
 # builds the axonivy-engine image and push it to docker hub
 # param 1: version
 # -- dev, sprint, nightly   -> development builds without further tags
-# -- 8.0                    -> LTS release, additonal version tag e.g. 8.0.1
-# -- latest                 -> LE release, additional version tag e.g. 9.1.0
+# -- 8.0                    -> LTS release -> Additional version tag e.g. 8.0.1
+# -- 9.1,9.2                -> LE release  -> Additional version tag e.g. 9.1.2
 ############################################################################
 VERSION=$1
 ENGINE_URL=https://developer.axonivy.com/permalink/${VERSION}/axonivy-engine.deb
@@ -51,10 +59,18 @@ docker push ${IMAGE_TAG}
 
 if [ $(isOfficialRelease $VERSION) == "yes" ]; then
     FULL_VERSION_TAG=${IMAGE}:${FULL_VERSION}
-    echo "publish official release ${FULL_VERSION_TAG}"
+    echo "tag official release with ${FULL_VERSION_TAG}"
     docker tag ${IMAGE_TAG} ${FULL_VERSION_TAG}
     docker push ${FULL_VERSION_TAG}
     docker rmi ${FULL_VERSION_TAG}
+fi
+
+if [ $(isCurrentLTS $VERSION) == "yes" ]; then
+    LATEST_VERSION_TAG=${IMAGE}:latest
+    echo "tag official LTS release with ${LATEST_VERSION_TAG}"
+    docker tag ${IMAGE_TAG} ${LATEST_VERSION_TAG}
+    docker push ${LATEST_VERSION_TAG}
+    docker rmi ${LATEST_VERSION_TAG}
 fi
 
 docker rmi ${IMAGE_TAG}

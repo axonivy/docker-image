@@ -1,4 +1,4 @@
-versions = ['rebuildAllSupportedVersions', 'dev', 'nightly', 'sprint', 'latest', '8.0']
+versions = ['rebuildAllSupportedVersions', 'dev', 'nightly', 'sprint', '8.0']
 
 pipeline {
   agent any
@@ -21,11 +21,11 @@ pipeline {
         script {
           def version = params.version;
           docker.withRegistry('', 'docker.io') {
-            if (version == 'rebuildAllSupportedVersions') {
-              sh "./build.sh latest"
+            if (version == 'rebuildAllSupportedVersions') {              
               sh "./build.sh 8.0"
+              // no rebuilds of leading edge versions
             } else {
-              sh "./build.sh ${version}"          
+              sh "./build.sh ${version}"
             }
           }
         }
