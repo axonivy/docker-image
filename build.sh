@@ -3,7 +3,7 @@
 # build context directory based on the given version to build
 buildContext() {
   version=$1
-  if [ $version == "8.0" ]; then
+  if [ $version == "8.0" ] || [ $version == 'nightly-8' ]; then
     echo "8.0"
   else # when version = dev|nightly|sprint|9|9.1|9.2|9.x
     echo "9"
@@ -23,7 +23,7 @@ isCurrentLTS() {
 # if this is a official release, we add a 'version' tag (e.g. 8.0.3)
 isOfficialRelease() {
   version=$1
-  if [ $version == "dev" ] || [ $version == "nightly" ] || [ $version == "sprint" ]; then
+  if [ $version == "dev" ] || [ $version == "nightly" ] || [ $version == "sprint" || [ $version == "nightly-8" ]; then
     echo "no"
   else
     echo "yes"

@@ -1,4 +1,4 @@
-versions = ['rebuildAllSupportedVersions', 'dev', 'nightly', 'sprint', '8.0']
+versions = ['rebuildAllSupportedVersions', 'dev', 'nightly', 'nightly-8', 'sprint', '8.0']
 
 pipeline {
   agent any
