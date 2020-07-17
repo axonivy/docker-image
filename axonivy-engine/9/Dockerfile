@@ -10,7 +10,7 @@ RUN apt-get update && \
 \
     useradd --uid 1000 --user-group --no-create-home ivy && \
 \
-    wget ${IVY_ENGINE_DOWNLOAD_URL} -O /tmp/${IVY_PACKAGE_NAME}.deb && \
+    wget ${IVY_ENGINE_DOWNLOAD_URL} -O /tmp/${IVY_PACKAGE_NAME}.deb --no-verbose && \
     dpkg --force-all -i /tmp/${IVY_PACKAGE_NAME}.deb && \
     ln -s /usr/lib/${IVY_PACKAGE_NAME} ${IVY_HOME} && \
     ln -s /var/lib/${IVY_PACKAGE_NAME} /var/lib/axonivy-engine && \
