@@ -1,5 +1,3 @@
-versions = ['rebuildAllSupportedVersions', 'dev', 'nightly', 'nightly-8', 'sprint', '8.0']
-
 pipeline {
   agent any
 
@@ -8,7 +6,10 @@ pipeline {
   }
   
   parameters {
-    choice name: 'version', choices: versions
+    string name: 'version',
+    defaultValue: 'rebuildAllSupportedLTSVersions',
+    description: 'version to build (dev, nightly, nightly-8, sprint, 8.0, 9.1, 9.2, ...)',
+    trim: true
   }
 
   triggers {    
@@ -21,9 +22,8 @@ pipeline {
         script {
           def version = params.version;
           docker.withRegistry('', 'docker.io') {
-            if (version == 'rebuildAllSupportedVersions') {              
+            if (version == 'rebuildAllSupportedLTSVersions') {              
               sh "./build.sh 8.0"
-              // no rebuilds of leading edge versions
             } else {
               sh "./build.sh ${version}"
             }
