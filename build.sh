@@ -23,7 +23,7 @@ isCurrentLTS() {
 # if this is a official release, we add a 'version' tag (e.g. 8.0.3)
 isOfficialRelease() {
   version=$1
-  if [ $version == "dev" ] || [ $version == "nightly" ] || [ $version == "sprint" || [ $version == "nightly-8" ]; then
+  if [ $version == "dev" ] || [ $version == "nightly" ] || [ $version == "sprint" ] || [ $version == "nightly-8" ]; then
     echo "no"
   else
     echo "yes"
