@@ -6,7 +6,7 @@ ARG IVY_PACKAGE_NAME=axonivy-engine-8
 ARG IVY_HOME=/usr/lib/axonivy-engine
 
 RUN apt-get update && \
-    apt-get install -y wget && \
+    apt-get install -y wget fontconfig libfreetype6 && \
 \
     useradd --uid 1000 --user-group --no-create-home ivy && \
 \
