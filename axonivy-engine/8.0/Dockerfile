@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM adoptopenjdk/openjdk11:debianslim-jre
 LABEL maintainer="AXON Ivy AG <info@axonivy.com>" 
 
 ARG IVY_ENGINE_DOWNLOAD_URL
@@ -6,7 +6,7 @@ ARG IVY_PACKAGE_NAME=axonivy-engine-8
 ARG IVY_HOME=/usr/lib/axonivy-engine
 
 RUN apt-get update && \
-    apt-get install -y wget fontconfig libfreetype6 && \
+    apt-get install -y wget && \
 \
     useradd --uid 1000 --user-group --no-create-home ivy && \
 \
