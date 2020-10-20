@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM adoptopenjdk/openjdk11:debianslim-jre
 LABEL maintainer="AXON Ivy AG <info@axonivy.com>" 
 
 ARG IVY_ENGINE_DOWNLOAD_URL
