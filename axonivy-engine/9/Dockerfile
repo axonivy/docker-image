@@ -6,13 +6,22 @@ ARG IVY_HOME=/usr/lib/axonivy-engine
 
 RUN apt-get update && \
     apt-get install -y wget unzip && \
-    useradd --uid 1000 --user-group --no-create-home ivy  && \
-    wget ${IVY_ENGINE_DOWNLOAD_URL} -O /tmp/ivy.zip --no-verbose  && \
-    unzip /tmp/ivy.zip -d ${IVY_HOME}  && \
-    ln -s ${IVY_HOME}/configuration /etc/axonivy-engine && \
-    ln -s ${IVY_HOME}/logs /var/log/axonivy-engine && \
+    rm -rf /var/lib/apt/lists/* && \
+\
+    useradd --uid 1000 --user-group --no-create-home ivy && \
+\
+    wget ${IVY_ENGINE_DOWNLOAD_URL} -O /tmp/ivy.zip --no-verbose && \
+    unzip /tmp/ivy.zip -d ${IVY_HOME} && \
     rm -f /tmp/ivy.zip && \
-    rm -rf /var/lib/apt/lists/*
+\
+    chown -R ivy:ivy ${IVY_HOME} && \
+\
+    mkdir /var/lib/axonivy-engine && \
+    ln -s ${IVY_HOME}/applications /var/lib/axonivy-engine/applications && \
+    ln -s ${IVY_HOME}/deploy /var/lib/axonivy-engine/deploy && \
+    ln -s ${IVY_HOME}/configuration /etc/axonivy-engine && \
+    ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine/elasticsearch && \
+    ln -s ${IVY_HOME}/logs /var/log/axonivy-engine
 
 ADD --chown=ivy:ivy ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
 RUN chmod u+x ${IVY_HOME}/bin/docker-entrypoint.sh 
