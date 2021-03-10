@@ -10,7 +10,7 @@ RUN apt-get update && \
     wget ${IVY_ENGINE_DOWNLOAD_URL} -O /tmp/ivy.zip --no-verbose  && \
     unzip /tmp/ivy.zip -d ${IVY_HOME}  && \
     ln -s ${IVY_HOME}/configuration /etc/axonivy-engine && \
-    ln -s ${IVY_HOME}/logs /var/logs/axonivy-engine && \
+    ln -s ${IVY_HOME}/logs /var/log/axonivy-engine && \
     rm -f /tmp/ivy.zip && \
     rm -rf /var/lib/apt/lists/*
 
