@@ -1,11 +1,11 @@
 [![LTS][1]][0] [![Latest][2]][0] 
 [![Sprint][3]][0] [![Nightly][4]][0] [![Dev][5]][0]
 
-# docker-image
+# Axon Ivy Engine Docker Image
 
-Axon Ivy Engine as Docker Image.
+Get an Axon Ivy Engine running with only one command:
 
-    docker run -p8080:8080 axonivy/axonivy-engine
+    docker run -p 8080:8080 axonivy/axonivy-engine
 
 Open your browser and go to http://localhost:8080
 
