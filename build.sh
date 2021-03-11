@@ -40,7 +40,7 @@ isOfficialRelease() {
 # -- 9.1,9.2                -> LE release  -> Additional version tag e.g. 9.1.2
 ############################################################################
 VERSION=$1
-ENGINE_URL=https://developer.axonivy.com/permalink/${VERSION}/axonivy-engine.deb
+ENGINE_URL=https://developer.axonivy.com/permalink/${VERSION}/axonivy-engine.zip
 IMAGE=axonivy/axonivy-engine
 echo "download debian package from ${ENGINE_URL}"
 
