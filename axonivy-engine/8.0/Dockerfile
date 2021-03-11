@@ -24,6 +24,7 @@ RUN apt-get update && \
     ln -s ${IVY_HOME}/logs /var/log/axonivy-engine && \
 \
     # for backward compatibilty. we have used the debian package.
+    mkdir /var/lib/axonivy-engine-8 && \
     ln -s ${IVY_HOME} /usr/lib/axonivy-engine-8 && \
     ln -s ${IVY_HOME}/applications /var/lib/axonivy-engine-8/applications && \
     ln -s ${IVY_HOME}/deploy /var/lib/axonivy-engine-8/deploy && \
