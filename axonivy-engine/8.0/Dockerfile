@@ -22,8 +22,14 @@ RUN apt-get update && \
     ln -s ${IVY_HOME}/configuration /etc/axonivy-engine && \
     ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine/elasticsearch && \
     ln -s ${IVY_HOME}/logs /var/log/axonivy-engine && \
-\    
-    ln -s ${IVY_HOME} /usr/lib/axonivy-engine-8
+\
+    # for backward compatibilty. we have used the debian package.
+    ln -s ${IVY_HOME} /usr/lib/axonivy-engine-8 && \
+    ln -s ${IVY_HOME}/applications /var/lib/axonivy-engine-8/applications && \
+    ln -s ${IVY_HOME}/deploy /var/lib/axonivy-engine-8/deploy && \
+    ln -s ${IVY_HOME}/configuration /etc/axonivy-engine-8 && \
+    ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine-8/elasticsearch && \
+    ln -s ${IVY_HOME}/logs /var/log/axonivy-engine-8
 
 ADD --chown=ivy:ivy ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
 RUN chmod u+x ${IVY_HOME}/bin/docker-entrypoint.sh 
