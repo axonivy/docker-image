@@ -12,6 +12,10 @@ Open your browser and go to http://localhost:8080
 We have many [docker-samples](https://github.com/ivy-samples/docker-samples)
 to see how Axon Ivy Engine can be used in a docker container.
 
+## Changelog
+
+See [changelog](CHANGELOG.md) for changes related to the Docker Image.
+
 [0]: https://hub.docker.com/r/axonivy/axonivy-engine/tags
 [1]: https://img.shields.io/badge/docker-8.0-green
 [2]: https://img.shields.io/badge/docker-latest-yellowgreen
