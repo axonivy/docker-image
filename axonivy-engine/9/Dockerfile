@@ -14,11 +14,13 @@ RUN apt-get update && \
     unzip /tmp/ivy.zip -d ${IVY_HOME} && \
     rm -f /tmp/ivy.zip && \
 \
+    mkdir ${IVY_HOME}/applications && \
     chown -R ivy:ivy ${IVY_HOME} && \
 \
     mkdir /var/lib/axonivy-engine && \
     ln -s ${IVY_HOME}/applications /var/lib/axonivy-engine/applications && \
     ln -s ${IVY_HOME}/deploy /var/lib/axonivy-engine/deploy && \
+    chown -R ivy:ivy /var/lib/axonivy-engine && \
     ln -s ${IVY_HOME}/configuration /etc/axonivy-engine && \
     ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine/elasticsearch && \
     ln -s ${IVY_HOME}/logs /var/log/axonivy-engine
