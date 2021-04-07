@@ -42,7 +42,7 @@ isOfficialRelease() {
 VERSION=$1
 ENGINE_URL=https://developer.axonivy.com/permalink/${VERSION}/axonivy-engine.zip
 IMAGE=axonivy/axonivy-engine
-echo "download debian package from ${ENGINE_URL}"
+echo "download ${ENGINE_URL}"
 
 REDIRECTED_URL=$(curl -sI ${ENGINE_URL} | tr -d '\r' | sed -En 's/^location: (.*)/\1/p')
 echo "redirected to ${REDIRECTED_URL}"
