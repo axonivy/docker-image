@@ -47,7 +47,7 @@ echo "download debian package from ${ENGINE_URL}"
 REDIRECTED_URL=$(curl -sI ${ENGINE_URL} | tr -d '\r' | sed -En 's/^location: (.*)/\1/p')
 echo "redirected to ${REDIRECTED_URL}"
 
-FULL_VERSION=$(echo "${REDIRECTED_URL}" | grep -oP '(\d+\.\d+.\d+)')
+FULL_VERSION=$(echo "${REDIRECTED_URL}" | grep -oP '(\d+\.\d+.\d+)' | head -1)
 echo "version to build ${FULL_VERSION}"
 
 buildContextDirectory=axonivy-engine/$(buildContext $VERSION)
