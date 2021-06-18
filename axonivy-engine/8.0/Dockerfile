@@ -32,7 +32,7 @@ RUN apt-get update && \
     chown -R ivy:ivy /var/lib/axonivy-engine-8 && \
     ln -s ${IVY_HOME}/deploy /var/lib/axonivy-engine-8/deploy && \
     ln -s ${IVY_HOME}/configuration /etc/axonivy-engine-8 && \
-    ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine-8/elasticsearch && \
+    #ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine-8/elasticsearch && \
     ln -s ${IVY_HOME}/logs /var/log/axonivy-engine-8
 
 ADD --chown=ivy:ivy ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
