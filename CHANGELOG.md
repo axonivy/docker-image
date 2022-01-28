@@ -1,5 +1,13 @@
 # Changelog
 
+## 2022-28-01
+
+### Changed
+
+- Change base image from unmaintaned `adoptopenjdk/openjdk11:debianslim-jre` image to maintained `eclipse-temurin:11-jre-focal` image. This changes affects the following versions:
+  - LTS 8.0: 8.0.25 and higher
+  - Leading Edge 9: 9.3.3 and higher
+
 ## 2021-03-11
 
 ### Changed

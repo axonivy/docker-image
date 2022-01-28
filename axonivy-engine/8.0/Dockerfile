@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:debianslim-jre
+FROM eclipse-temurin:11-jre-focal
 LABEL maintainer="Axon Ivy AG <info@axonivy.com>" 
 
 ARG IVY_ENGINE_DOWNLOAD_URL
