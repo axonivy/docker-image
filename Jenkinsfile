@@ -23,7 +23,8 @@ pipeline {
           def version = params.version;
           docker.withRegistry('', 'docker.io') {
             if (version == 'rebuildAllSupportedLTSVersions') {
-              sh "./build.sh 8.0"
+              // comment in when 8.0.25 has been released
+              // sh "./build.sh 8.0"
             } else {
               sh "./build.sh ${version}"
             }
