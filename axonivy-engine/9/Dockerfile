@@ -15,6 +15,7 @@ RUN apt-get update && \
     rm -f /tmp/ivy.zip && \
 \
     mkdir ${IVY_HOME}/applications && \
+    mkdir ${IVY_HOME}/configuration/applications && \
     chown -R ivy:ivy ${IVY_HOME} && \
 \
     mkdir /var/lib/axonivy-engine && \
