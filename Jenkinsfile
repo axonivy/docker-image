@@ -7,7 +7,7 @@ pipeline {
   
   parameters {
     string name: 'version',
-    defaultValue: 'rebuildAllSupportedLTSVersions',
+    defaultValue: 'dev',
     description: 'version to build (dev, nightly, nightly-8, sprint, 8.0, 9.1, 9.2, ...)',
     trim: true
   }
