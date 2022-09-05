@@ -5,8 +5,10 @@ buildContext() {
   version=$1
   if [ $version == "8.0" ] || [ $version == 'nightly-8' ]; then
     echo "8.0"
-  else # when version = dev|nightly|sprint|9|9.1|9.2|9.x
+  elif [ $version == '9.1' ] || [ $version == '9.2' ] || [ $version == '9.3' ]; then
     echo "9"
+  else # when version = dev|nightly|sprint|9.4|9
+    echo "9.4"
   fi
 }
 
@@ -53,7 +55,7 @@ echo "version to build ${FULL_VERSION}"
 buildContextDirectory=axonivy-engine/$(buildContext $VERSION)
 echo "build image in build context directory $buildContextDirectory"
 
-IMAGE_TAG=${IMAGE}:${VERSION} 
+IMAGE_TAG=${IMAGE}:${VERSION}
 docker build --pull -t ${IMAGE_TAG} ${buildContextDirectory} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL}
 docker push ${IMAGE_TAG}
 
