@@ -7,8 +7,10 @@ buildContext() {
     echo "8.0"
   elif [ $version == '9.1' ] || [ $version == '9.2' ] || [ $version == '9.3' ]; then
     echo "9"
-  else # when version = dev|nightly|sprint|9.4|9
+  elif [ $version == '9' ] || $version == '9.4' ]; then
     echo "9.4"
+  else # when version = dev|nightly|sprint
+    echo "10.0"
   fi
 }
 
