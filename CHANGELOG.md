@@ -1,5 +1,11 @@
 # Changelog
 
+## 2022-09-28
+
+### Changed
+
+- Change base image from `eclipse-temurin:17-jre-focal` to `eclipse-temurin:17-jre-jammy` for images 10.0 and higher.
+
 ## 2022-09-05
 
 ### Changed
