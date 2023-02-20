@@ -36,7 +36,10 @@ RUN apt-get update && \
     ln -s ${IVY_HOME}/logs /var/log/axonivy-engine-8
 
 ADD --chown=ivy:ivy ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
-RUN chmod u+x ${IVY_HOME}/bin/docker-entrypoint.sh 
+RUN chmod u+x ${IVY_HOME}/bin/docker-entrypoint.sh && \
+\
+    chgrp -R 0 ${IVY_HOME} && \
+    chmod -R g=u ${IVY_HOME}
 
 WORKDIR ${IVY_HOME}
 USER 1000

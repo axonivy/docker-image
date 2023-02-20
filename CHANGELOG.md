@@ -1,5 +1,12 @@
 # Changelog
 
+## 2023-02-20
+
+### Changed
+
+- Extend base image reference with registry url.
+- Make images OpenShift compatible by applying the [arbitrary user id](https://docs.openshift.com/container-platform/4.12/openshift_images/create-images.html#images-create-guide-openshift_create-images) logic.
+
 ## 2022-09-28
 
 ### Changed
