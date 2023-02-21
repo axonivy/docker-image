@@ -1,5 +1,11 @@
 # Changelog
 
+## 2023-02-21
+
+### Changed
+
+- Extend base image reference with registry url (docker.io).
+
 ## 2022-09-28
 
 ### Changed
