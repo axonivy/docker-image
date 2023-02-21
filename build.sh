@@ -44,11 +44,26 @@ isOfficialRelease() {
 # -- dev, sprint, nightly   -> development builds without further tags
 # -- 8.0                    -> LTS release -> Additional version tag e.g. 8.0.1
 # -- 9.1,9.2                -> LE release  -> Additional version tag e.g. 9.1.2
+# param 2: --push
+# -- if set to true, images will be pushed to the docker registry
+# -- default: false
 ############################################################################
 VERSION=$1
+PUSH=0
+if [ $# -eq 2 ]; then
+  if [ $2 = "--push" ]; then
+    PUSH=1
+  fi
+fi
 ENGINE_URL=https://developer.axonivy.com/permalink/${VERSION}/axonivy-engine.zip
-IMAGE=axonivy/axonivy-engine
 echo "download ${ENGINE_URL}"
+echo "push ${PUSH} (0=NO, 1=YES)"
+
+IMAGE=axonivy/axonivy-engine-local
+if [ "$PUSH" = "1" ]; then
+  IMAGE=axonivy/axonivy-engine
+fi
+echo "building image ${IMAGE}"
 
 REDIRECTED_URL=$(curl -sI ${ENGINE_URL} | tr -d '\r' | sed -En 's/^location: (.*)/\1/p')
 echo "redirected to ${REDIRECTED_URL}"
@@ -61,22 +76,32 @@ echo "build image in build context directory $buildContextDirectory"
 
 IMAGE_TAG=${IMAGE}:${VERSION}
 docker build --pull -t ${IMAGE_TAG} ${buildContextDirectory} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL}
-docker push ${IMAGE_TAG}
+
+if [ "$PUSH" = "1" ]; then
+  docker push ${IMAGE_TAG}
+fi
 
 if [ $(isOfficialRelease $VERSION) == "yes" ]; then
     FULL_VERSION_TAG=${IMAGE}:${FULL_VERSION}
     echo "tag official release with ${FULL_VERSION_TAG}"
     docker tag ${IMAGE_TAG} ${FULL_VERSION_TAG}
-    docker push ${FULL_VERSION_TAG}
-    docker rmi ${FULL_VERSION_TAG}
+    if [ "$PUSH" = "1" ]; then
+      docker push ${FULL_VERSION_TAG}
+      docker rmi ${FULL_VERSION_TAG}
+    fi
 fi
 
 if [ $(isCurrentLTS $VERSION) == "yes" ]; then
     LATEST_VERSION_TAG=${IMAGE}:latest
     echo "tag official LTS release with ${LATEST_VERSION_TAG}"
     docker tag ${IMAGE_TAG} ${LATEST_VERSION_TAG}
-    docker push ${LATEST_VERSION_TAG}
-    docker rmi ${LATEST_VERSION_TAG}
+    
+    if [ "$PUSH" = "1" ]; then
+      docker push ${LATEST_VERSION_TAG}
+      docker rmi ${LATEST_VERSION_TAG}
+    fi
 fi
 
-docker rmi ${IMAGE_TAG}
+if [ "$PUSH" = "1" ]; then
+  docker rmi ${IMAGE_TAG}
+fi
