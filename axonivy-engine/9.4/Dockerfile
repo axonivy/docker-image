@@ -16,18 +16,18 @@ RUN apt-get update && \
 \
     mkdir ${IVY_HOME}/applications && \
     mkdir ${IVY_HOME}/configuration/applications && \
-    chown -R ivy:ivy ${IVY_HOME} && \
+    chown -R ivy:0 ${IVY_HOME} && \
 \
     mkdir /var/lib/axonivy-engine && \
     ln -s ${IVY_HOME}/applications /var/lib/axonivy-engine/applications && \
     ln -s ${IVY_HOME}/deploy /var/lib/axonivy-engine/deploy && \
-    chown -R ivy:ivy /var/lib/axonivy-engine && \
+    chown -R ivy:0 /var/lib/axonivy-engine && \
     ln -s ${IVY_HOME}/configuration /etc/axonivy-engine && \
     ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine/elasticsearch && \
     ln -s ${IVY_HOME}/logs /var/log/axonivy-engine
 
-ADD --chown=ivy:ivy ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
-RUN chmod u+x ${IVY_HOME}/bin/docker-entrypoint.sh 
+ADD --chown=ivy:0 ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
+RUN chmod ug+x ${IVY_HOME}/bin/docker-entrypoint.sh 
 
 WORKDIR ${IVY_HOME}
 USER 1000

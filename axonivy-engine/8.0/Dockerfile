@@ -15,12 +15,12 @@ RUN apt-get update && \
     rm -f /tmp/ivy.zip && \
 \
     mkdir ${IVY_HOME}/applications && \
-    chown -R ivy:ivy ${IVY_HOME} && \
+    chown -R ivy:0 ${IVY_HOME} && \
 \
     mkdir /var/lib/axonivy-engine && \
     ln -s ${IVY_HOME}/applications /var/lib/axonivy-engine/applications && \
     ln -s ${IVY_HOME}/deploy /var/lib/axonivy-engine/deploy && \
-    chown -R ivy:ivy /var/lib/axonivy-engine && \
+    chown -R ivy:0 /var/lib/axonivy-engine && \
     ln -s ${IVY_HOME}/configuration /etc/axonivy-engine && \
     ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine/elasticsearch && \
     ln -s ${IVY_HOME}/logs /var/log/axonivy-engine && \
@@ -29,14 +29,14 @@ RUN apt-get update && \
     mkdir /var/lib/axonivy-engine-8 && \
     ln -s ${IVY_HOME} /usr/lib/axonivy-engine-8 && \
     ln -s ${IVY_HOME}/applications /var/lib/axonivy-engine-8/applications && \
-    chown -R ivy:ivy /var/lib/axonivy-engine-8 && \
+    chown -R ivy:0 /var/lib/axonivy-engine-8 && \
     ln -s ${IVY_HOME}/deploy /var/lib/axonivy-engine-8/deploy && \
     ln -s ${IVY_HOME}/configuration /etc/axonivy-engine-8 && \
     #ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine-8/elasticsearch && \
     ln -s ${IVY_HOME}/logs /var/log/axonivy-engine-8
 
 ADD --chown=ivy:ivy ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
-RUN chmod u+x ${IVY_HOME}/bin/docker-entrypoint.sh 
+RUN chmod ug+x ${IVY_HOME}/bin/docker-entrypoint.sh 
 
 WORKDIR ${IVY_HOME}
 USER 1000
