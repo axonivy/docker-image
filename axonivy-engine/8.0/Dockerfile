@@ -38,7 +38,7 @@ RUN apt-get update && \
     # that you can run the engine with an arbitrary users (group needs to have write access)
     chmod -R g=u ${IVY_HOME}
 
-ADD --chown=ivy:ivy ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
+ADD --chown=ivy:0 ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
 RUN chmod ug+x ${IVY_HOME}/bin/docker-entrypoint.sh 
 
 WORKDIR ${IVY_HOME}
