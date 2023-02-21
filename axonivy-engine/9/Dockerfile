@@ -25,6 +25,9 @@ RUN apt-get update && \
     ln -s ${IVY_HOME}/configuration /etc/axonivy-engine && \
     ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine/elasticsearch && \
     ln -s ${IVY_HOME}/logs /var/log/axonivy-engine
+\
+    # that you can run the engine with an arbitrary users (group needs to have write access)
+    chmod -R g=u ${IVY_HOME}
 
 ADD --chown=ivy:0 ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
 RUN chmod ug+x ${IVY_HOME}/bin/docker-entrypoint.sh 
