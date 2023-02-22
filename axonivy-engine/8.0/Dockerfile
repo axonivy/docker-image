@@ -33,7 +33,7 @@ RUN apt-get update && \
     ln -s ${IVY_HOME}/deploy /var/lib/axonivy-engine-8/deploy && \
     ln -s ${IVY_HOME}/configuration /etc/axonivy-engine-8 && \
     #ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine-8/elasticsearch && \
-    ln -s ${IVY_HOME}/logs /var/log/axonivy-engine-8
+    ln -s ${IVY_HOME}/logs /var/log/axonivy-engine-8 && \
 \
     # that you can run the engine with an arbitrary users (group needs to have write access)
     chmod -R g=u ${IVY_HOME}
