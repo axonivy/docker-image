@@ -29,10 +29,7 @@ RUN apt-get update && \
     # that you can run the engine with an arbitrary users (group needs to have write access)
     chmod -R g=u ${IVY_HOME}
 
-ADD --chown=ivy:0 ./docker-entrypoint.sh ${IVY_HOME}/bin/docker-entrypoint.sh
-RUN chmod ug+x ${IVY_HOME}/bin/docker-entrypoint.sh 
-
 WORKDIR ${IVY_HOME}
 USER 1000
 EXPOSE 8080
-ENTRYPOINT ["/usr/lib/axonivy-engine/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/lib/axonivy-engine/bin/AxonIvyEngine"]

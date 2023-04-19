@@ -25,9 +25,9 @@ The images won't be pushed to `docker.io` by default, only by
 passing the param `--push`.
 
 ```bash
-build.sh dev
-build.sh 10.0
-build.sh 10.0.1
+./build.sh dev
+./build.sh 10.0
+./build.sh 10.0.1
 ```
 
 [0]: https://hub.docker.com/r/axonivy/axonivy-engine/tags
