@@ -24,7 +24,9 @@ pipeline {
           docker.withRegistry('', 'docker.io') {
             if (version == 'rebuildAllSupportedLTSVersions') {              
               sh "./build.sh 8.0 --push"
-              sh "./build.sh 10.0 --push"
+
+              // comment in after 10.0.8 has been released. otherwise we make breaking changes to 10.0.7.
+              // sh "./build.sh 10.0 --push"
             } else {
               sh "./build.sh ${version} --push"
             }

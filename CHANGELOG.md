@@ -5,6 +5,7 @@
 ### Changed
 
 - No longer create system database if it does not exist on container startup with `docker-entrypoint.sh`. This can be configured in `ivy.yaml` if needed.
+  - LTS 10.0: 10.0.8 and higher
   - Leading Edge: 11.1.0 and higher
 
 ## 2023-02-21
