@@ -75,7 +75,7 @@ buildContextDirectory=axonivy-engine/$(buildContext $VERSION)
 echo "build image in build context directory $buildContextDirectory"
 
 IMAGE_TAG=${IMAGE}:${VERSION}
-docker build --pull -t ${IMAGE_TAG} ${buildContextDirectory} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL}
+docker build --no-cache --pull -t ${IMAGE_TAG} ${buildContextDirectory} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL}
 
 if [ "$PUSH" = "1" ]; then
   docker push ${IMAGE_TAG}
