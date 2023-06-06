@@ -1,5 +1,11 @@
 # Changelog
 
+## 2023-06-06
+
+### Changed
+
+- Add HEALTHCHECK for 11.1.0 and higher
+
 ## 2023-04-10
 
 ### Changed
