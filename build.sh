@@ -88,13 +88,13 @@ fi
 
 FULL_VERSION_TAG=""
 if [ $(isOfficialRelease $VERSION) == "yes" ]; then
-    FULL_VERSION_TAG=--tag ${IMAGE}:${FULL_VERSION}
+    FULL_VERSION_TAG="--tag ${IMAGE}:${FULL_VERSION}"
     echo "tag official release with ${FULL_VERSION_TAG}"
 fi
 
-LATEST_VERSION_TAG
+LATEST_VERSION_TAG=""
 if [ $(isCurrentLTS $VERSION) == "yes" ]; then
-    LATEST_VERSION_TAG=--tag ${IMAGE}:latest
+    LATEST_VERSION_TAG="--tag ${IMAGE}:latest"
     echo "tag official LTS release with ${LATEST_VERSION_TAG}"
 fi
 
