@@ -81,9 +81,9 @@ echo "build image in build context directory $buildContextDirectory"
 
 docker buildx create --name mymultibuilder --driver docker-container --bootstrap --use
 IMAGE_TAG=${IMAGE}:${VERSION}
-PUSHIT=""
+PUSHIT="--load" # the generated image will be loaded in the local docker image registry
 if [ "$PUSH" = "1" ]; then
-  PUSHIT="--push"
+  PUSHIT="--push --platform linux/amd64,linux/arm64" # the generated images will be published to hub.dockercom
 fi
 
 FULL_VERSION_TAG=""
@@ -98,4 +98,4 @@ if [ $(isCurrentLTS $VERSION) == "yes" ]; then
     echo "tag official LTS release with ${LATEST_VERSION_TAG}"
 fi
 
-docker buildx build --platform linux/amd64,linux/arm64 --no-cache --pull --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} ${buildContextDirectory} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL} ${PUSHIT} 
+docker buildx build --no-cache --pull --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} ${buildContextDirectory} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL} ${PUSHIT} 
