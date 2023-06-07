@@ -108,6 +108,7 @@ if [ $(isCurrentLTS $VERSION) == "yes" ]; then
     fi
 fi
 
-if [ "$PUSH" = "1" ]; then
-  docker rmi ${IMAGE_TAG}
-fi
+# seems that buildx doesn't populate it in the local image registry
+#if [ "$PUSH" = "1" ]; then
+#  docker rmi ${IMAGE_TAG}
+#fi
