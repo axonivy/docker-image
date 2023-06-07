@@ -49,6 +49,11 @@ isOfficialRelease() {
 # -- default: false
 ############################################################################
 VERSION=$1
+if [ -z $VERSION ]; then
+  echo "Parameter 1: version is required"
+  exit 0
+fi
+
 PUSH=0
 if [ $# -eq 2 ]; then
   if [ $2 = "--push" ]; then
@@ -74,12 +79,13 @@ echo "version to build ${FULL_VERSION}"
 buildContextDirectory=axonivy-engine/$(buildContext $VERSION)
 echo "build image in build context directory $buildContextDirectory"
 
+docker buildx create --name mymultibuilder --driver docker-container --bootstrap --use
 IMAGE_TAG=${IMAGE}:${VERSION}
-docker build --no-cache --pull -t ${IMAGE_TAG} ${buildContextDirectory} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL}
-
+PUSHIT=""
 if [ "$PUSH" = "1" ]; then
-  docker push ${IMAGE_TAG}
+  PUSHIT="--push"
 fi
+docker buildx build --platform linux/amd64,linux/arm64 --no-cache --pull -t ${IMAGE_TAG} ${buildContextDirectory} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL} ${PUSHIT}
 
 if [ $(isOfficialRelease $VERSION) == "yes" ]; then
     FULL_VERSION_TAG=${IMAGE}:${FULL_VERSION}
