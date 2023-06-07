@@ -85,30 +85,17 @@ PUSHIT=""
 if [ "$PUSH" = "1" ]; then
   PUSHIT="--push"
 fi
-docker buildx build --platform linux/amd64,linux/arm64 --no-cache --pull -t ${IMAGE_TAG} ${buildContextDirectory} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL} ${PUSHIT}
 
+FULL_VERSION_TAG=""
 if [ $(isOfficialRelease $VERSION) == "yes" ]; then
-    FULL_VERSION_TAG=${IMAGE}:${FULL_VERSION}
+    FULL_VERSION_TAG=--tag ${IMAGE}:${FULL_VERSION}
     echo "tag official release with ${FULL_VERSION_TAG}"
-    docker tag ${IMAGE_TAG} ${FULL_VERSION_TAG}
-    if [ "$PUSH" = "1" ]; then
-      docker push ${FULL_VERSION_TAG}
-      docker rmi ${FULL_VERSION_TAG}
-    fi
 fi
 
+LATEST_VERSION_TAG
 if [ $(isCurrentLTS $VERSION) == "yes" ]; then
-    LATEST_VERSION_TAG=${IMAGE}:latest
+    LATEST_VERSION_TAG=--tag ${IMAGE}:latest
     echo "tag official LTS release with ${LATEST_VERSION_TAG}"
-    docker tag ${IMAGE_TAG} ${LATEST_VERSION_TAG}
-    
-    if [ "$PUSH" = "1" ]; then
-      docker push ${LATEST_VERSION_TAG}
-      docker rmi ${LATEST_VERSION_TAG}
-    fi
 fi
 
-# seems that buildx doesn't populate it in the local image registry
-#if [ "$PUSH" = "1" ]; then
-#  docker rmi ${IMAGE_TAG}
-#fi
+docker buildx build --platform linux/amd64,linux/arm64 --no-cache --pull --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} ${buildContextDirectory} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL} ${PUSHIT} 
