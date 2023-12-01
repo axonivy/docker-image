@@ -21,6 +21,7 @@ pipeline {
       steps {
         script {
           def version = params.version;
+          currentBuild.description = "version: ${version}"
           docker.withRegistry('', 'docker.io') {
             if (version == 'rebuildAllSupportedLTSVersions') {              
               sh "./build.sh 8.0 --push"
@@ -30,6 +31,47 @@ pipeline {
             }
           }
         }
+      }
+    }
+
+    stage('docker-scout') {
+      steps {
+        script {
+          def version = params.version;
+          docker.withRegistry('', 'docker.io') {
+            if (version == 'rebuildAllSupportedLTSVersions') {
+              dockerScoutRecordInEnv(8, 8.0);
+              dockerScoutRecordInEnv(10, 10.0);
+              dockerScoutAnalyze(8.0);
+              dockerScoutAnalyze(10.0);
+            } else {
+              def env = version.replace('.0', '').replace('.', '-');
+              currentBuild.description = "version: ${version} <a href='https://scout.docker.com/reports/org/axonivy/overview?stream=environment%3A${env}'>docker-scout</a>"
+              dockerScoutRecordInEnv(env, version);
+              dockerScoutAnalyze(version);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+def dockerScoutRecordInEnv(String env, String version) {
+  withCredentials([usernamePassword(credentialsId: 'docker.io-axonivyinfo', passwordVariable: 'dockerPass', usernameVariable: 'dockerUser')]) {
+    ansiColor('xterm') {
+      sh "docker run -t -e DOCKER_SCOUT_HUB_USER=${dockerUser} -e DOCKER_SCOUT_HUB_PASSWORD=${dockerPass} " +
+         "docker/scout-cli env ${env} --org axonivy axonivy/axonivy-engine:${version}"
+    }
+  }
+}
+
+def dockerScoutAnalyze(String version) {
+  withCredentials([usernamePassword(credentialsId: 'docker.io', passwordVariable: 'dockerPass', usernameVariable: 'dockerUser')]) {
+    ansiColor('xterm') {
+      catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+        sh "docker run -t -e DOCKER_SCOUT_HUB_USER=${dockerUser} -e DOCKER_SCOUT_HUB_PASSWORD=${dockerPass} " +
+          "docker/scout-cli cves axonivy/axonivy-engine:${version} --exit-code --locations --only-severity critical,high"
       }
     }
   }
