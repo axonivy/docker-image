@@ -71,7 +71,7 @@ def dockerScoutAnalyze(String version) {
     ansiColor('xterm') {
       catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
         sh "docker run -t -e DOCKER_SCOUT_HUB_USER=${dockerUser} -e DOCKER_SCOUT_HUB_PASSWORD=${dockerPass} " +
-          "docker/scout-cli cves axonivy/axonivy-engine:${version} --exit-code --locations --only-severity critical,high"
+          "docker/scout-cli cves axonivy/axonivy-engine:${version} --exit-code --ignore-base --only-fixed --locations"
       }
     }
   }
