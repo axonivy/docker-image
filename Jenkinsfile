@@ -40,15 +40,15 @@ pipeline {
           def version = params.version;
           docker.withRegistry('', 'docker.io') {
             if (version == 'rebuildAllSupportedLTSVersions') {
-              dockerScoutRecordInEnv(8, 8.0);
-              dockerScoutRecordInEnv(10, 10.0);
-              dockerScoutAnalyze(8.0);
-              dockerScoutAnalyze(10.0);
+              dockerScoutAnalyze('8.0');
+              dockerScoutRecordInEnv('8', '8.0');
+              dockerScoutAnalyze('10.0');
+              dockerScoutRecordInEnv('10', '10.0');
             } else {
               def env = version.replace('.0', '').replace('.', '-');
               currentBuild.description = "version: ${version} <a href='https://scout.docker.com/reports/org/axonivy/overview?stream=environment%3A${env}'>docker-scout</a>"
-              dockerScoutRecordInEnv(env, version);
               dockerScoutAnalyze(version);
+              dockerScoutRecordInEnv(env, version);
             }
           }
         }
