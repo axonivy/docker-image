@@ -1,0 +1,65 @@
+pipeline {
+  agent any
+
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '50'))
+  }
+  
+  parameters {
+    string name: 'version',
+    defaultValue: 'dev',
+    description: 'version to build (dev, nightly, nightly-8, sprint, 8.0, 9.1, 9.2, ...)',
+    trim: true
+  }
+
+  triggers {    
+    cron '@midnight'
+  }
+
+  stages {
+    stage('analyze') {
+      steps {
+        script {
+          def version = params.version;
+          currentBuild.description = "version: ${version}"
+          dockerScoutAnalyze(version);
+        }
+      }
+    }
+
+    stage('compare') {
+      steps {
+        script {
+          def version = params.version;
+          def env = version.replace('.0', '').replace('.', '-');
+          dockerScoutCompare(version, env);
+          dockerScoutRecordInEnv(env, version);
+          currentBuild.description = "version: ${version} <a href='https://scout.docker.com/reports/org/axonivy/overview?stream=environment%3A${env}'>docker-scout</a>"
+        }
+      }
+    }
+  }
+}
+
+def dockerScoutAnalyze(String version) {
+  withCredentials([usernamePassword(credentialsId: 'docker.io', passwordVariable: 'dockerPass', usernameVariable: 'dockerUser')]) {
+    sh "docker run -t -e DOCKER_SCOUT_HUB_USER=${dockerUser} -e DOCKER_SCOUT_HUB_PASSWORD=${dockerPass} " +
+      "docker/scout-cli cves axonivy/axonivy-engine:${version} --ignore-base --only-fixed --locations"
+  }
+}
+
+def dockerScoutCompare(String version, String toEnv) {
+  withCredentials([usernamePassword(credentialsId: 'docker.io', passwordVariable: 'dockerPass', usernameVariable: 'dockerUser')]) {
+    catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+      sh "docker run -t -e DOCKER_SCOUT_HUB_USER=${dockerUser} -e DOCKER_SCOUT_HUB_PASSWORD=${dockerPass} " +
+         "docker/scout-cli compare axonivy/axonivy-engine:${version} --exit-on vulnerability,policy --only-package-type maven,npm --to-env ${toEnv} --org axonivy"
+    }
+  }
+}
+
+def dockerScoutRecordInEnv(String env, String version) {
+  withCredentials([usernamePassword(credentialsId: 'docker.io-axonivyinfo', passwordVariable: 'dockerPass', usernameVariable: 'dockerUser')]) {
+    sh "docker run -t -e DOCKER_SCOUT_HUB_USER=${dockerUser} -e DOCKER_SCOUT_HUB_PASSWORD=${dockerPass} " +
+       "docker/scout-cli env ${env} --org axonivy axonivy/axonivy-engine:${version}"
+  }
+}
