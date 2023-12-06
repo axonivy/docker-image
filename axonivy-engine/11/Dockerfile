@@ -1,4 +1,4 @@
-FROM ubuntu AS build
+FROM docker.io/ubuntu AS build
 
 ARG IVY_ENGINE_DOWNLOAD_URL
 
