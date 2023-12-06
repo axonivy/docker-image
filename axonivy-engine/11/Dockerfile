@@ -1,18 +1,21 @@
-FROM docker.io/eclipse-temurin:17-jre-jammy
-LABEL maintainer="Axon Ivy AG <info@axonivy.com>" 
+FROM ubuntu AS build
 
 ARG IVY_ENGINE_DOWNLOAD_URL
-ARG IVY_HOME=/usr/lib/axonivy-engine
 
 RUN apt-get update && \
     apt-get install -y wget unzip && \
-    rm -rf /var/lib/apt/lists/* && \
-\
-    useradd --uid 1000 --user-group --no-create-home ivy && \
-\
+    rm -rf /var/lib/apt/lists/* &&\
     wget ${IVY_ENGINE_DOWNLOAD_URL} -O /tmp/ivy.zip --no-verbose && \
-    unzip /tmp/ivy.zip -d ${IVY_HOME} && \
-    rm -f /tmp/ivy.zip && \
+    unzip /tmp/ivy.zip -d /tmp/engine && \
+    rm -f /tmp/ivy.zip
+
+
+FROM docker.io/eclipse-temurin:17-jre-jammy
+LABEL maintainer="Axon Ivy AG <info@axonivy.com>" 
+ARG IVY_HOME=/usr/lib/axonivy-engine
+COPY --from=build /tmp/engine ${IVY_HOME}
+
+RUN useradd --uid 1000 --user-group --no-create-home ivy && \
 \
     mkdir ${IVY_HOME}/applications && \
     mkdir ${IVY_HOME}/configuration/applications && \
