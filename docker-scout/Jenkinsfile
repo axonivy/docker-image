@@ -39,8 +39,8 @@ pipeline {
 }
 
 def dockerScoutAnalyze(String version) {
-  withCredentials([usernamePassword(credentialsId: 'docker.io', passwordVariable: 'dockerPass', usernameVariable: 'dockerUser')]) {
-    def dockerLogin = dockerLoginAsEnv(dockerUser, dockerPass);
+  withCredentials([usernamePassword(credentialsId: 'docker.io', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+    def dockerLogin = dockerLoginAsEnv();
     sh "docker run -t ${dockerLogin} " +
        "docker/scout-cli cves axonivy/axonivy-engine:${version} " +
        "--ignore-base --only-fixed --locations"
@@ -48,8 +48,8 @@ def dockerScoutAnalyze(String version) {
 }
 
 def dockerScoutCompare(String version, String toEnv) {
-  withCredentials([usernamePassword(credentialsId: 'docker.io', passwordVariable: 'dockerPass', usernameVariable: 'dockerUser')]) {
-    def dockerLogin = dockerLoginAsEnv(dockerUser, dockerPass);
+  withCredentials([usernamePassword(credentialsId: 'docker.io', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+    def dockerLogin = dockerLoginAsEnv();
     catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
       sh "docker run -t ${dockerLogin} " +
          "docker/scout-cli compare axonivy/axonivy-engine:${version} " + 
@@ -59,12 +59,12 @@ def dockerScoutCompare(String version, String toEnv) {
 }
 
 def dockerScoutRecordInEnv(String env, String version) {
-  withCredentials([usernamePassword(credentialsId: 'docker.io-axonivyinfo', passwordVariable: 'dockerPass', usernameVariable: 'dockerUser')]) {
-    sh "docker run -t -e DOCKER_SCOUT_HUB_USER=${dockerUser} -e DOCKER_SCOUT_HUB_PASSWORD=${dockerPass} " +
+  withCredentials([usernamePassword(credentialsId: 'docker.io-axonivyinfo', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+    sh 'docker run -t -e DOCKER_SCOUT_HUB_USER=$DOCKER_USER -e DOCKER_SCOUT_HUB_PASSWORD=$DOCKER_PASS ' +
        "docker/scout-cli env ${env} --org axonivy axonivy/axonivy-engine:${version}"
   }
 }
 
-def dockerLoginAsEnv(String dockerUser, String dockerPass) {
-  return "-e DOCKER_SCOUT_HUB_USER=${dockerUser} -e DOCKER_SCOUT_HUB_PASSWORD=${dockerPass} -e DOCKER_SCOUT_REGISTRY_USER=${dockerUser} -e DOCKER_SCOUT_REGISTRY_PASSWORD=${dockerPass}"
+def dockerLoginAsEnv() {
+  return '-e DOCKER_SCOUT_HUB_USER=$DOCKER_USER -e DOCKER_SCOUT_HUB_PASSWORD=$DOCKER_PASS -e DOCKER_SCOUT_REGISTRY_USER=$DOCKER_USER -e DOCKER_SCOUT_REGISTRY_PASSWORD=$DOCKER_PASS'
 }
