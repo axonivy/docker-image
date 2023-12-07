@@ -1,21 +1,18 @@
-FROM docker.io/ubuntu AS build
+FROM docker.io/eclipse-temurin:17-jre-jammy
+LABEL maintainer="Axon Ivy AG <info@axonivy.com>" 
 
 ARG IVY_ENGINE_DOWNLOAD_URL
+ARG IVY_HOME=/usr/lib/axonivy-engine
 
 RUN apt-get update && \
     apt-get install -y wget unzip && \
-    rm -rf /var/lib/apt/lists/* &&\
+    rm -rf /var/lib/apt/lists/* && \
+\
+    useradd --uid 1000 --user-group --no-create-home ivy && \
+\
     wget ${IVY_ENGINE_DOWNLOAD_URL} -O /tmp/ivy.zip --no-verbose && \
-    unzip /tmp/ivy.zip -d /tmp/engine && \
-    rm -f /tmp/ivy.zip
-
-
-FROM docker.io/eclipse-temurin:17-jre-jammy
-LABEL maintainer="Axon Ivy AG <info@axonivy.com>" 
-ARG IVY_HOME=/usr/lib/axonivy-engine
-COPY --from=build /tmp/engine ${IVY_HOME}
-
-RUN useradd --uid 1000 --user-group --no-create-home ivy && \
+    unzip /tmp/ivy.zip -d ${IVY_HOME} && \
+    rm -f /tmp/ivy.zip && \
 \
     mkdir ${IVY_HOME}/applications && \
     mkdir ${IVY_HOME}/configuration/applications && \
@@ -37,3 +34,4 @@ USER 1000
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5m --retries=3 CMD curl -f http://localhost:8080/ || exit 1
 ENTRYPOINT ["/usr/lib/axonivy-engine/bin/AxonIvyEngine"]
+
