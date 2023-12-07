@@ -7,13 +7,17 @@ pipeline {
   
   parameters {
     string name: 'version',
-    defaultValue: 'rebuildAllSupportedLTSVersions',
-    description: 'version to build (dev, nightly, nightly-8, sprint, 8.0, 9.1, 9.2, ...)',
+    defaultValue: 'dev',
+    description: 'version to build (dev, nightly, nightly-10, sprint, 8.0, 10.0, 11.2, ...)',
     trim: true
   }
 
-  triggers {    
-    cron '@midnight'
+  triggers {
+    parameterizedCron('''
+      @midnight %version=8.0
+      @midnight %version=10.0
+      @midnight %version=11.2
+    ''')
   }
 
   stages {
@@ -23,15 +27,8 @@ pipeline {
           def version = params.version;
           currentBuild.description = "version: ${version}"
           docker.withRegistry('', 'docker.io') {
-            if (version == 'rebuildAllSupportedLTSVersions') {              
-              sh "./build.sh 8.0 --push"
-              sh "./build.sh 10.0 --push"
-              triggerDockerScoutBuild('8.0');
-              triggerDockerScoutBuild('10.0');
-            } else {
-              sh "./build.sh ${version} --push"
-              triggerDockerScoutBuild(version);
-            }
+            sh "./build.sh ${version} --push"
+            triggerDockerScoutBuild(version);
           }
         }
       }

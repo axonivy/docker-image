@@ -4,16 +4,12 @@ pipeline {
   options {
     buildDiscarder(logRotator(numToKeepStr: '50'))
   }
-  
+
   parameters {
     string name: 'version',
     defaultValue: 'dev',
-    description: 'version to build (dev, nightly, nightly-8, sprint, 8.0, 9.1, 9.2, ...)',
+    description: 'version to analyze (dev, nightly, nightly-10, sprint, 8.0, 10.0, 11.2, ...)',
     trim: true
-  }
-
-  triggers {    
-    cron '@midnight'
   }
 
   stages {
