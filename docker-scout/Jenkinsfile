@@ -27,9 +27,19 @@ pipeline {
       steps {
         script {
           def version = params.version;
-          def env = version.replace('.0', '').replace('.', '-');
+          def env = dockerScoutEnvFrom(version);
           dockerScoutCompare(version, env);
+        }
+      }
+    }
+
+    stage('record') {
+      steps {
+        script {
+          def version = params.version;
+          def env = dockerScoutEnvFrom(version);
           dockerScoutRecordInEnv(env, version);
+
           def scoutHref = "https://scout.docker.com/reports/org/axonivy/overview?stream=environment%3A${env}"
           currentBuild.description = "version: ${version} <a href='${scoutHref}'>docker-scout</a>"
         }
@@ -67,4 +77,8 @@ def dockerScoutRecordInEnv(String env, String version) {
 
 def dockerLoginAsEnv() {
   return '-e DOCKER_SCOUT_HUB_USER=$DOCKER_USER -e DOCKER_SCOUT_HUB_PASSWORD=$DOCKER_PASS -e DOCKER_SCOUT_REGISTRY_USER=$DOCKER_USER -e DOCKER_SCOUT_REGISTRY_PASSWORD=$DOCKER_PASS'
+}
+
+def dockerScoutEnvFrom(String version) {
+  return version.replace('.0', '').replace('.', '-');
 }
