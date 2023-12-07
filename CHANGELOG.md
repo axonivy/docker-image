@@ -1,11 +1,5 @@
 # Changelog
 
-## 2023-12-06
-
-### Removed
-
-- Removed `wget` and `unzip` executables for images 11.0 and higher
-
 ## 2023-06-07
 
 ### Added
