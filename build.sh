@@ -83,7 +83,8 @@ docker buildx create --name mymultibuilder --driver docker-container --bootstrap
 IMAGE_TAG=${IMAGE}:${VERSION}
 PUSHIT="--load" # the generated image will be loaded in the local docker image registry
 if [ "$PUSH" = "1" ]; then
-  PUSHIT="--push --platform linux/amd64,linux/arm64" # the generated images will be published to hub.dockercom
+  # the generated images will be published to hub.docker.com
+  PUSHIT="--push --platform linux/amd64,linux/arm64 --attest type=provenance --attest type=sbom,generator=docker/scout-sbom-indexer:latest"
 fi
 
 FULL_VERSION_TAG=""
@@ -98,4 +99,4 @@ if [ $(isCurrentLTS $VERSION) == "yes" ]; then
     echo "tag official LTS release with ${LATEST_VERSION_TAG}"
 fi
 
-docker buildx build --no-cache --pull --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} --provenance=true --attest type=sbom,generator=docker/scout-sbom-indexer:latest --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL} ${PUSHIT} ${buildContextDirectory}
+docker buildx build --no-cache --pull --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL} ${PUSHIT} ${buildContextDirectory}
