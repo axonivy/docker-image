@@ -13,14 +13,6 @@ pipeline {
     booleanParam(name: 'triggerDockerScout', defaultValue: true)
   }
 
-  triggers {
-    parameterizedCron('''
-      @midnight %version=8.0
-      @midnight %version=10.0
-      @midnight %version=11.2
-    ''')
-  }
-
   stages {
     stage('build') {
       steps {
