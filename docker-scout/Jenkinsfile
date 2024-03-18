@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   options {
-    buildDiscarder(logRotator(numToKeepStr: '150'))
+    buildDiscarder(logRotator(numToKeepStr: '60'))
   }
 
   parameters {
@@ -20,21 +20,7 @@ pipeline {
           currentBuild.description = "version: ${version}"
           dockerScoutAnalyze(version);
           archiveArtifacts 'report/sarif.json'
-          recordIssues qualityGates: [[threshold: 1, type: 'TOTAL']], sourceCodeRetention: 'NEVER', tools: [sarif(pattern: 'report/sarif.json')], filters: [
-            // Apache POI: can we update now?
-            // excludeType('CVE-2022-26336'),
-            // elasticsearch: snakeyamel
-            excludeType('CVE-2022-1471'),
-            // elasticsearch: Apache http client
-            excludeType('CVE-2020-13956'),
-
-            // 10.0: Guava
-            // excludeType('CVE-2023-2976'),
-            // 10.0: Jersey: information disclosure in local file system
-            // excludeType('CVE-2021-28168'),
-            // 10.0: Guava
-            // excludeType('CVE-2020-8908'),
-          ]
+          recordIssues sourceCodeRetention: 'NEVER', tools: [sarif(pattern: 'report/sarif.json')]
         }
       }
     }
