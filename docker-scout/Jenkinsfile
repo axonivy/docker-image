@@ -19,6 +19,7 @@ pipeline {
           def version = params.version;
           currentBuild.description = "version: ${version}"
           dockerScoutAnalyze(version);
+          archiveArtifacts 'report/sarif.json'
           recordIssues qualityGates: [[threshold: 1, type: 'TOTAL']], sourceCodeRetention: 'NEVER', tools: [sarif(pattern: 'report/sarif.json')], filters: [
             // Apache POI: can we update now?
             // excludeType('CVE-2022-26336'),
