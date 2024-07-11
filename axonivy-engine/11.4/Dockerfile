@@ -1,4 +1,4 @@
-FROM docker.io/eclipse-temurin:21-jre-jellyfish
+FROM docker.io/eclipse-temurin:21-jre-jammy
 LABEL maintainer="Axon Ivy AG <info@axonivy.com>" 
 
 ARG IVY_ENGINE_DOWNLOAD_URL
