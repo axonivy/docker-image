@@ -2,7 +2,7 @@
 
 ## 2024-07-11
 
-- Change base image from `docker.io/eclipse-temurin:17-jre-jammy` to `docker.io/eclipse-temurin:21-jre-jellyfish` for version 11.4 and higher.
+- Change base image from `docker.io/eclipse-temurin:17-jre-jammy` to `docker.io/eclipse-temurin:21-jre-jammy` for version 11.4 and higher.
 
 ## 2023-06-07
 
