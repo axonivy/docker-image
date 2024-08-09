@@ -8,7 +8,8 @@ RUN apt-get update && \
     apt-get install -y wget unzip && \
     rm -rf /var/lib/apt/lists/* && \
 \
-    useradd --uid 1000 --user-group --no-create-home ivy && \
+    usermod -l ivy ubuntu && \
+    groupmod -n ivy ubuntu && \
 \
     wget ${IVY_ENGINE_DOWNLOAD_URL} -O /tmp/ivy.zip --no-verbose && \
     unzip /tmp/ivy.zip -d ${IVY_HOME} && \
