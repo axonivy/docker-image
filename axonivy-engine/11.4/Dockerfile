@@ -2,12 +2,10 @@ FROM docker.io/ubuntu:24.04 AS build
 
 ARG IVY_ENGINE_DOWNLOAD_URL
 
+ADD ${IVY_ENGINE_DOWNLOAD_URL} /tmp/ivy.zip
 RUN apt-get update && \
-    apt-get install -y unzip curl && \
-\
-    curl -o /tmp/ivy.zip -L ${IVY_ENGINE_DOWNLOAD_URL} && \
+    apt-get install -y unzip && \
     unzip /tmp/ivy.zip -d /tmp/ivy
-
 
 FROM docker.io/eclipse-temurin:21-jre-noble
 LABEL maintainer="Axon Ivy AG <info@axonivy.com>"
