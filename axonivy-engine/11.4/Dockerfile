@@ -23,14 +23,6 @@ RUN usermod -l ivy ubuntu && \
     mkdir ${IVY_HOME}/configuration/applications && \
     chown -R ivy:0 ${IVY_HOME} && \
 \
-    mkdir /var/lib/axonivy-engine && \
-    ln -s ${IVY_HOME}/applications /var/lib/axonivy-engine/applications && \
-    ln -s ${IVY_HOME}/deploy /var/lib/axonivy-engine/deploy && \
-    chown -R ivy:0 /var/lib/axonivy-engine && \
-    ln -s ${IVY_HOME}/configuration /etc/axonivy-engine && \
-    ln -s ${IVY_HOME}/elasticsearch/config /etc/axonivy-engine/elasticsearch && \
-    ln -s ${IVY_HOME}/logs /var/log/axonivy-engine && \
-\
     # that you can run the engine with an arbitrary users (group needs to have write access)
     chmod -R g=u ${IVY_HOME}
 
