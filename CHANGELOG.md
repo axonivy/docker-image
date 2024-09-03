@@ -3,6 +3,12 @@
 ## 2024-09-03
 
 - Remove `wget` and `unzip` from image for version 11.4 and higher.
+- Removed the following symlinks for version 11.4 and higher:
+  - /var/lib/axonivy-engine/applications
+  - /var/lib/axonivy-engine/deploy
+  - /etc/axonivy-engine
+  - /etc/axonivy-engine/elasticsearch
+  - /var/log/axonivy-engine
 
 ## 2024-08-09
 
