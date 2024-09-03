@@ -5,13 +5,13 @@ ARG IVY_ENGINE_DOWNLOAD_URL
 ARG IVY_HOME=/usr/lib/axonivy-engine
 
 RUN apt-get update && \
-    apt-get install -y wget unzip && \
+    apt-get install -y unzip && \
     rm -rf /var/lib/apt/lists/* && \
 \
     usermod -l ivy ubuntu && \
     groupmod -n ivy ubuntu && \
 \
-    wget ${IVY_ENGINE_DOWNLOAD_URL} -O /tmp/ivy.zip --no-verbose && \
+    curl -o /tmp/ivy.zip -L ${IVY_ENGINE_DOWNLOAD_URL} && \
     unzip /tmp/ivy.zip -d ${IVY_HOME} && \
     rm -f /tmp/ivy.zip && \
 \
