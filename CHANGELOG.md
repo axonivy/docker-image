@@ -1,5 +1,9 @@
 # Changelog
 
+## 2024-09-03
+
+- Remove `wget` from image for version 11.4 and higher.
+
 ## 2024-08-09
 
 - Change base image from `docker.io/eclipse-temurin:21-jre-yammy` to `docker.io/eclipse-temurin:21-jre-noble` for version 11.4 and higher.
