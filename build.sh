@@ -101,4 +101,4 @@ if [ $(isCurrentLTS $VERSION) == "yes" ]; then
     echo "tag official LTS release with ${LATEST_VERSION_TAG}"
 fi
 
-docker buildx build --no-cache --pull --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} --build-arg IVY_ENGINE_DOWNLOAD_URL=${ENGINE_URL} ${PUSHIT} ${buildContextDirectory}
+docker buildx build --no-cache --pull --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} --build-arg IVY_ENGINE_DOWNLOAD_URL=${REDIRECTED_URL} ${PUSHIT} ${buildContextDirectory}
