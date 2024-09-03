@@ -2,7 +2,7 @@
 
 ## 2024-09-03
 
-- Remove `wget` from image for version 11.4 and higher.
+- Remove `wget` and `unzip` from image for version 11.4 and higher.
 
 ## 2024-08-09
 
