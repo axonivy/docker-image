@@ -19,6 +19,7 @@ RUN usermod -l ivy ubuntu && \
 \
     mkdir ${IVY_HOME}/applications && \
     mkdir ${IVY_HOME}/data && \
+    mkdir ${IVY_HOME}/logs && \
     mkdir ${IVY_HOME}/configuration/applications && \
     chown -R ivy:0 ${IVY_HOME} && \
 \

@@ -3,7 +3,7 @@
 ## 2024-09-03
 
 - Changed the installation directory from `/usr/lib/axonivy-engine` to `/ivy` for version 11.4 and higher.
-- Removed `wget` and `unzip` from image for version 11.4 and higher.
+- Removed `unzip` from image for version 11.4 and higher.
 - Removed the following symlinks for version 11.4 and higher:
   - `/var/lib/axonivy-engine/applications`
   - `/var/lib/axonivy-engine/deploy`
