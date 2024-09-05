@@ -5,26 +5,23 @@ ARG IVY_ENGINE_DOWNLOAD_URL
 ADD ${IVY_ENGINE_DOWNLOAD_URL} /tmp/ivy.zip
 RUN apt-get update && \
     apt-get install -y unzip && \
-    unzip /tmp/ivy.zip -d /tmp/ivy
+    unzip /tmp/ivy.zip -d /tmp/ivy && \
+    mkdir /tmp/ivy/applications && \
+    mkdir /tmp/ivy/data && \
+    mkdir /tmp/ivy/logs && \
+    mkdir /tmp/ivy/configuration/applications && \
+    chown -R 1000:0 /tmp/ivy && \
+    chmod -R g=u /tmp/ivy
 
 FROM docker.io/eclipse-temurin:21-jre-noble
 LABEL maintainer="Axon Ivy AG <info@axonivy.com>"
 
+RUN usermod -l ivy ubuntu && \
+    groupmod -n ivy ubuntu
+
 ARG IVY_HOME=/ivy
 
-COPY --from=build /tmp/ivy ${IVY_HOME}
-
-RUN usermod -l ivy ubuntu && \
-    groupmod -n ivy ubuntu && \
-\
-    mkdir ${IVY_HOME}/applications && \
-    mkdir ${IVY_HOME}/data && \
-    mkdir ${IVY_HOME}/logs && \
-    mkdir ${IVY_HOME}/configuration/applications && \
-    chown -R ivy:0 ${IVY_HOME} && \
-\
-    # that you can run the engine with an arbitrary users (group needs to have write access)
-    chmod -R g=u ${IVY_HOME}
+COPY --from=build --chown=1000:0 /tmp/ivy ${IVY_HOME}
 
 VOLUME [ "/ivy/data", "/ivy/configuration" ]
 
