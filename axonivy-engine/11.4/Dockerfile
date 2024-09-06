@@ -6,11 +6,9 @@ ADD ${IVY_ENGINE_DOWNLOAD_URL} /tmp/ivy.zip
 RUN apt-get update && \
     apt-get install -y unzip && \
     unzip /tmp/ivy.zip -d /tmp/ivy && \
-    mkdir /tmp/ivy/applications && \
     mkdir /tmp/ivy/data && \
     mkdir /tmp/ivy/logs && \
     mkdir /tmp/ivy/configuration/applications && \
-    chown -R 1000:0 /tmp/ivy && \
     chmod -R g=u /tmp/ivy
 
 FROM docker.io/eclipse-temurin:21-jre-noble
