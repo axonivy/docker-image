@@ -10,7 +10,6 @@ RUN apt-get update && \
     mkdir /tmp/ivy/data && \
     mkdir /tmp/ivy/logs && \
     mkdir /tmp/ivy/configuration/applications && \
-    chown -R 1000:0 /tmp/ivy && \
     chmod -R g=u /tmp/ivy
 
 FROM docker.io/eclipse-temurin:21-jre-noble
@@ -23,7 +22,7 @@ ARG IVY_HOME=/ivy
 
 COPY --from=build --chown=1000:0 /tmp/ivy ${IVY_HOME}
 
-VOLUME [ "/ivy/data", "/ivy/configuration" ]
+VOLUME [ "/ivy/data", "/ivy/configuration", "/ivy/applications" ]
 
 WORKDIR ${IVY_HOME}
 USER 1000
