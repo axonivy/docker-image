@@ -14,7 +14,7 @@ buildContext() {
   elif [ $version == '11.1' ] || [ $version == 'nightly-11.1' ] || [ $version == '11.2' ] || [ $version == 'nightly-11.2' ] || [ $version == '11.3' ] || [ $version == 'nightly-11.3' ]; then
     echo "11"
   else # when version = dev|nightly|sprint
-    echo "11.4"
+    echo "12"
   fi
 }
 
