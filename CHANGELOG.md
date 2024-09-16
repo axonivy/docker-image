@@ -2,9 +2,9 @@
 
 ## 2024-09-03
 
-- Changed the installation directory from `/usr/lib/axonivy-engine` to `/ivy` for version 11.4 and higher.
-- Removed `unzip` from image for version 11.4 and higher.
-- Removed the following symlinks for version 11.4 and higher:
+- Changed the installation directory from `/usr/lib/axonivy-engine` to `/ivy` for version 12.0 and higher.
+- Removed `unzip` from image for version 12.0 and higher.
+- Removed the following symlinks for version 12.0 and higher:
   - `/var/lib/axonivy-engine/applications`
   - `/var/lib/axonivy-engine/deploy`
   - `/etc/axonivy-engine`
@@ -13,11 +13,11 @@
 
 ## 2024-08-09
 
-- Change base image from `docker.io/eclipse-temurin:21-jre-yammy` to `docker.io/eclipse-temurin:21-jre-noble` for version 11.4 and higher.
+- Change base image from `docker.io/eclipse-temurin:21-jre-yammy` to `docker.io/eclipse-temurin:21-jre-noble` for version 12.0 and higher.
 
 ## 2024-07-11
 
-- Change base image from `docker.io/eclipse-temurin:17-jre-jammy` to `docker.io/eclipse-temurin:21-jre-jammy` for version 11.4 and higher.
+- Change base image from `docker.io/eclipse-temurin:17-jre-jammy` to `docker.io/eclipse-temurin:21-jre-jammy` for version 12.0 and higher.
 
 ## 2023-06-07
 
