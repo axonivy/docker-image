@@ -20,7 +20,7 @@ pipeline {
           currentBuild.description = "version: ${version}"
           dockerScoutAnalyze(version);
           archiveArtifacts 'report/sarif.json'
-          recordIssues sourceCodeRetention: 'NEVER', tools: [sarif(pattern: 'report/sarif.json')]
+          recordIssues sourceCodeRetention: 'NEVER', tools: [sarif(pattern: 'report/sarif.json')], qualityGates: [[threshold: 1, type: 'TOTAL']]
         }
       }
     }
@@ -85,7 +85,7 @@ def dockerLoginAsEnv() {
 }
 
 def dockerScoutContainer() {
-  return 'docker/scout-cli:1.6.4'
+  return 'docker/scout-cli:1.14.0'
 }
 
 def axonivyEngineImageUrl(String version) {
