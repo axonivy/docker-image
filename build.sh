@@ -21,7 +21,7 @@ buildContext() {
 # if its the current LTS, we add 'latest' tag
 isCurrentLTS() {
   version=$1
-  if [ $version == "10.0" ]; then
+  if [ $version == "12.0" ]; then
     echo "yes"
   else
     echo "no"
