@@ -12,7 +12,7 @@ RUN apt-get update && \
     mkdir /tmp/ivy/configuration/applications && \
     chmod -R g=u /tmp/ivy
 
-FROM docker.io/eclipse-temurin:21-jre-noble
+FROM docker.io/eclipse-temurin:23-jre-noble
 LABEL maintainer="Axon Ivy AG <info@axonivy.com>"
 
 RUN usermod -l ivy ubuntu && \
