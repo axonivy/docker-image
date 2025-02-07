@@ -65,16 +65,7 @@ def dockerScoutAnalyze(String version) {
         "${dockerScoutContainer()} sbom ${axonivyEngineImageUrl(version)} " +
         "--format cyclonedx --output /report/bom.json"
 
-            withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
-              sh 'curl -v --fail -X POST https://api.dependency-track.ivyteam.io/api/v1/bom \
-                      -H "Content-Type: multipart/form-data" \
-                      -H "X-API-Key: ' + API_KEY + '" \
-                      -F "autoCreate=true" \
-                      -F "projectName=axonivy/axonivy-engine" \
-                      -F "projectVersion=' + version + '" \
-                      -F "bom=@report/bom.json"'
-            }
-
+    uploadBOM(projectName: 'axonivy/axonivy-engine', projectVersion: version, bomFile: 'report/bom.json')
   }
 }
 
