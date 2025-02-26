@@ -1,5 +1,12 @@
 # Changelog
 
+## 2025-02-26
+
+### Fixed
+
+- Set write permissions on the root folder `/ivy` for the group. So that
+  you can run the container with arbitrary user (e.g. OpenShift).
+
 ## 2024-09-03
 
 ### Changed
