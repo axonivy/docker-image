@@ -1,5 +1,11 @@
 # Changelog
 
+## 2025-07-02
+
+### Changed
+
+- No longer bundle `dll`, `exe` and `bat` files (since 12.0).
+
 ## 2025-02-26
 
 ### Fixed

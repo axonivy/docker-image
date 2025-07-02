@@ -5,7 +5,7 @@ ARG IVY_ENGINE_DOWNLOAD_URL
 ADD ${IVY_ENGINE_DOWNLOAD_URL} /ivy.zip
 RUN apt-get update && \
     apt-get install -y unzip && \
-    unzip /ivy.zip -d /ivy && \
+    unzip /ivy.zip -x "bin/*.exe" -x "bin/*.dll" -x "bin/AxonIvyEngine.service" -x "bin/InstallService.sh" -x "opensearch/bin/*.bat" -d /ivy && \
     mkdir /ivy/applications && \
     mkdir /ivy/data && \
     mkdir /ivy/logs && \
