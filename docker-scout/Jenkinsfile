@@ -91,7 +91,7 @@ def dockerLoginAsEnv() {
 }
 
 def dockerScoutContainer() {
-  return 'docker/scout-cli:1.15.1'
+  return 'docker/scout-cli:1.18.4'
 }
 
 def axonivyEngineImageUrl(String version) {
