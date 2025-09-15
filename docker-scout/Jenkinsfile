@@ -1,5 +1,7 @@
 pipeline {
-  agent any
+  agent {
+    label 'docker-image'
+  }
 
   options {
     buildDiscarder(logRotator(numToKeepStr: '60'))
