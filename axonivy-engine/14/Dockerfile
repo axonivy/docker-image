@@ -21,6 +21,10 @@ LABEL maintainer="Axon Ivy AG <info@axonivy.com>"
 RUN usermod -l ivy ubuntu && \
     groupmod -n ivy ubuntu
 
+RUN apt-get update && \
+    apt-get install -y wget && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY --from=build --chown=1000:0 /ivy /ivy
 RUN chmod g+w /ivy
 
