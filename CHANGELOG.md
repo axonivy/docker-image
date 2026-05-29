@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-05-29
+
+### Changed
+
+- Change base image from `docker.io/eclipse-temurin:25-jre-noble` to `docker.io/eclipse-temurin:25-jre-resolute` for version 14.0.
+
 ## 2025-07-02
 
 ### Changed
