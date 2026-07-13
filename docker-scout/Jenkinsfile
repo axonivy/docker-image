@@ -93,7 +93,7 @@ def dockerLoginAsEnv() {
 }
 
 def dockerScoutContainer() {
-  return 'docker/scout-cli:1.18.4'
+  return sh (script: "cat docker-scout/Dockerfile.scout", returnStdout:true).trim().replaceFirst(/^FROM\s+/, '')
 }
 
 def axonivyEngineImageUrl(String version) {
