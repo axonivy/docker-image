@@ -1,5 +1,12 @@
 # Changelog
 
+## 20260-07-14
+
+### Added
+
+- Provide an alpine based image for version 14 (postfix `-alpine`).
+- Proivde an alpine based image without `demo-portal` and `opensearch` for version 14 (postfix `-alpine-slim`).
+
 ## 2026-05-29
 
 ### Changed
