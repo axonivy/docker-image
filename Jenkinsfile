@@ -22,7 +22,12 @@ pipeline {
           def version = params.version;
           currentBuild.description = "version: ${version}"
           docker.withRegistry('', 'docker.io') {
-            sh "./build.sh ${version} --push"
+            sh "./build.sh ${version} ubuntu --push"
+
+            if (version == 'dev' || version == 'nightly' || version == 'sprint') {
+              sh "./build.sh ${version} alpine --push"
+              sh "./build.sh ${version} alpine-slim --push"
+            }
           }
         }
       }

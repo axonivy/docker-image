@@ -40,6 +40,26 @@ isOfficialRelease() {
   fi
 }
 
+# builds a string to add the variant as postfix to the image tag
+buildTagPostfix() {
+  variant=$1
+  if [ $(isDefaultVariant $variant) == "yes" ]; then
+    echo ""
+  else
+    echo "-${variant}"
+  fi
+}
+
+# checks wether the given variant is the default variant (ubuntu) or not
+isDefaultVariant() {
+  variant=$1
+  if [ $variant == "ubuntu" ]; then
+    echo "yes"
+  else
+    echo "no"
+  fi
+}
+
 ###########################################################################
 # build.sh
 #--------------------------------------------------------------------------
@@ -48,7 +68,10 @@ isOfficialRelease() {
 # -- dev, sprint, nightly   -> development builds without further tags
 # -- 8.0                    -> LTS release -> Additional version tag e.g. 8.0.1
 # -- 9.1,9.2                -> LE release  -> Additional version tag e.g. 9.1.2
-# param 2: --push
+# param 2: variant
+# -- ubuntu                 -> ubuntu
+# -- alpine                 -> alpine
+# param 3: --push
 # -- if set to true, images will be pushed to the docker registry
 # -- default: false
 ############################################################################
@@ -58,9 +81,15 @@ if [ -z $VERSION ]; then
   exit 0
 fi
 
+VARIANT=$2
+if [ -z $VARIANT ]; then
+  echo "Parameter 2: variant is required"
+  exit 0
+fi
+
 PUSH=0
-if [ $# -eq 2 ]; then
-  if [ $2 = "--push" ]; then
+if [ $# -eq 3 ]; then
+  if [ $3 = "--push" ]; then
     PUSH=1
   fi
 fi
@@ -84,7 +113,8 @@ buildContextDirectory=axonivy-engine/$(buildContext $VERSION)
 echo "build image in build context directory $buildContextDirectory"
 
 docker buildx create --name mymultibuilder --driver docker-container --bootstrap --use
-IMAGE_TAG=${IMAGE}:${VERSION}
+IMAGE_TAG=${IMAGE}:${VERSION}$(buildTagPostfix $VARIANT)
+
 PUSHIT="--load" # the generated image will be loaded in the local docker image registry
 if [ "$PUSH" = "1" ]; then
   # the generated images will be published to hub.docker.com
@@ -93,14 +123,19 @@ fi
 
 FULL_VERSION_TAG=""
 if [ $(isOfficialRelease $VERSION) == "yes" ]; then
-    FULL_VERSION_TAG="--tag ${IMAGE}:${FULL_VERSION}"
+    FULL_VERSION_TAG="--tag ${IMAGE}:${FULL_VERSION}$(buildTagPostfix $VARIANT)"
     echo "tag official release with ${FULL_VERSION_TAG}"
 fi
 
 LATEST_VERSION_TAG=""
-if [ $(isCurrentLTS $VERSION) == "yes" ]; then
+if [ $(isDefaultVariant $VARIANT) == "yes" ] && [ $(isCurrentLTS $VERSION) == "yes" ]; then
     LATEST_VERSION_TAG="--tag ${IMAGE}:latest"
     echo "tag official LTS release with ${LATEST_VERSION_TAG}"
 fi
 
-docker buildx build --no-cache --pull --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} --build-arg IVY_ENGINE_DOWNLOAD_URL=${REDIRECTED_URL} ${PUSHIT} -f ${buildContextDirectory}/Dockerfile.ubuntu ${buildContextDirectory}
+docker buildx build --no-cache --pull \
+ --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} \
+ --build-arg IVY_ENGINE_DOWNLOAD_URL=${REDIRECTED_URL} \
+ ${PUSHIT} \
+ -f ${buildContextDirectory}/Dockerfile.${VARIANT} \
+ ${buildContextDirectory}
