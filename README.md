@@ -4,7 +4,7 @@
 
 Get an Axon Ivy Engine running with only one command:
 
-    docker run -p 8080:8080 axonivy/axonivy-engine
+    docker run -p 8080:8080 axonivy/axonivy-engine:12.0
 
 Open your browser and go to <http://localhost:8080>
 
