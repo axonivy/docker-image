@@ -20,13 +20,21 @@ pipeline {
         script {
           def version = params.version;
           currentBuild.description = "version: ${version}"
-          dockerScoutAnalyze(version);
-          archiveArtifacts 'report/*.json'
-          recordIssues sourceCodeRetention: 'NEVER', tools: [sarif(pattern: 'report/sarif.json')], qualityGates: [[threshold: 1, type: 'TOTAL']]
 
-          def env = dockerScoutEnvFrom(version);
-          dockerScoutCompare(version, env);
-          dockerScoutRecordInEnv(version, env);
+          def tags = [version]
+          if (version == 'dev' || version == 'sprint' || version == 'nightly') {
+            tags = [version, version + '-alpine', version + '-alpine-slim']
+          }
+
+          for (def tag : tags) {
+            dockerScoutAnalyze(tag);
+            archiveArtifacts 'report/*.json'
+            recordIssues sourceCodeRetention: 'NEVER', tools: [sarif(pattern: 'report/sarif.json')], qualityGates: [[threshold: 1, type: 'TOTAL']]
+
+            def env = dockerScoutEnvFrom(tag);
+            dockerScoutCompare(tag, env);
+            dockerScoutRecordInEnv(tag, env);
+          }
 
           def scoutHref = "https://scout.docker.com/reports/org/axonivy/overview?stream=environment%3A${env}"
           currentBuild.description = "version: ${version} <a href='${scoutHref}'>docker-scout</a>"
