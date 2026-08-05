@@ -23,7 +23,7 @@ pipeline {
 
           def tags = [version]
           if (version == 'dev' || version == 'sprint' || version == 'nightly') {
-            tags = [version, version + '-alpine', version + '-alpine-slim']
+            tags = [version, version + '-slim', version + '-alpine', version + '-alpine-slim']
           }
 
           for (def tag : tags) {
