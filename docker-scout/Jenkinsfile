@@ -15,7 +15,7 @@ pipeline {
   }
 
   stages {
-    stage('analyze') {
+    stage('scouting') {
       steps {
         script {
           def version = params.version;
@@ -23,26 +23,10 @@ pipeline {
           dockerScoutAnalyze(version);
           archiveArtifacts 'report/*.json'
           recordIssues sourceCodeRetention: 'NEVER', tools: [sarif(pattern: 'report/sarif.json')], qualityGates: [[threshold: 1, type: 'TOTAL']]
-        }
-      }
-    }
 
-    stage('compare') {
-      steps {
-        script {
-          def version = params.version;
           def env = dockerScoutEnvFrom(version);
           dockerScoutCompare(version, env);
-        }
-      }
-    }
-
-    stage('record') {
-      steps {
-        script {
-          def version = params.version;
-          def env = dockerScoutEnvFrom(version);
-          dockerScoutRecordInEnv(env, version);
+          dockerScoutRecordInEnv(version, env);
 
           def scoutHref = "https://scout.docker.com/reports/org/axonivy/overview?stream=environment%3A${env}"
           currentBuild.description = "version: ${version} <a href='${scoutHref}'>docker-scout</a>"
@@ -52,39 +36,39 @@ pipeline {
   }
 }
 
-def dockerScoutAnalyze(String version) {
+def dockerScoutAnalyze(String tag) {
   withCredentials([usernamePassword(credentialsId: 'docker.io', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
     sh "docker run -t ${dockerLoginAsEnv()} " +
-       "${dockerScoutContainer()} cves ${axonivyEngineImageUrl(version)} " +
+       "${dockerScoutContainer()} cves ${axonivyEngineImageUrl(tag)} " +
        "--ignore-base --locations"
 
     sh "mkdir -p ${env.WORKSPACE}/report"
     sh "docker run -t -v ${env.WORKSPACE}/report/:/report/ ${dockerLoginAsEnv()} " +
-        "${dockerScoutContainer()} cves ${axonivyEngineImageUrl(version)} " +
+        "${dockerScoutContainer()} cves ${axonivyEngineImageUrl(tag)} " +
         "--ignore-base --only-fixed --locations --format sarif --output /report/sarif.json"
 
     sh "docker run -t -v ${env.WORKSPACE}/report/:/report/ ${dockerLoginAsEnv()} " +
-        "${dockerScoutContainer()} sbom ${axonivyEngineImageUrl(version)} " +
+        "${dockerScoutContainer()} sbom ${axonivyEngineImageUrl(tag)} " +
         "--format cyclonedx --output /report/bom.json"
 
-    uploadBOM(projectName: 'axonivy/axonivy-engine', projectVersion: version, bomFile: 'report/bom.json')
+    uploadBOM(projectName: 'axonivy/axonivy-engine', projectVersion: tag, bomFile: 'report/bom.json')
   }
 }
 
-def dockerScoutCompare(String version, String toEnv) {
+def dockerScoutCompare(String tag, String env) {
   withCredentials([usernamePassword(credentialsId: 'docker.io', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
     catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
       sh "docker run -t ${dockerLoginAsEnv()} " +
-         "${dockerScoutContainer()} compare ${axonivyEngineImageUrl(version)} " + 
-         "--exit-on vulnerability,policy --only-package-type maven,npm --to-env ${toEnv} --org axonivy"
+         "${dockerScoutContainer()} compare ${axonivyEngineImageUrl(tag)} " + 
+         "--exit-on vulnerability,policy --only-package-type maven,npm --to-env ${env} --org axonivy"
     }
   }
 }
 
-def dockerScoutRecordInEnv(String env, String version) {
+def dockerScoutRecordInEnv(String tag, String env) {
   withCredentials([usernamePassword(credentialsId: 'docker.io-axonivyinfo', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
     sh 'docker run -t -e DOCKER_SCOUT_HUB_USER=$DOCKER_USER -e DOCKER_SCOUT_HUB_PASSWORD=$DOCKER_PASS ' +
-       "${dockerScoutContainer()} env ${env} --org axonivy ${axonivyEngineImageUrl(version)}"
+       "${dockerScoutContainer()} env ${env} --org axonivy ${axonivyEngineImageUrl(tag)}"
   }
 }
 
@@ -96,10 +80,10 @@ def dockerScoutContainer() {
   return sh (script: "cat docker-scout/Dockerfile.scout", returnStdout:true).trim().replaceFirst(/^FROM\s+/, '')
 }
 
-def axonivyEngineImageUrl(String version) {
-  return 'registry://axonivy/axonivy-engine:' + version
+def axonivyEngineImageUrl(String tag) {
+  return 'registry://axonivy/axonivy-engine:' + tag
 }
 
-def dockerScoutEnvFrom(String version) {
+def dockerScoutEnvFrom(String tag) {
   return version.replace('.0', '').replace('.', '-');
 }
