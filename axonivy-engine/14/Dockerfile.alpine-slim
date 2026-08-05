@@ -23,7 +23,6 @@ RUN addgroup -g 1000 ivy && \
     apk add --no-cache bash
 
 COPY --from=build --chown=1000:0 /ivy /ivy
-RUN chmod g+w /ivy
 
 VOLUME [ "/ivy/data", "/ivy/configuration", "/ivy/applications" ]
 
