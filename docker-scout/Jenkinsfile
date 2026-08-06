@@ -25,6 +25,9 @@ pipeline {
           if (version == 'dev' || version == 'sprint' || version == 'nightly') {
             tags = [version, version + '-slim', version + '-alpine', version + '-alpine-slim']
           }
+          if (version == '12.0' || version == 'nightly-12.0') {
+            tags = [version, version + '-slim', version + '-alpine', version + '-alpine-slim']
+          }
 
           for (def tag : tags) {
             dockerScoutAnalyze(tag);
