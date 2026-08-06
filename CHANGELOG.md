@@ -1,12 +1,20 @@
 # Changelog
 
-## 20260-07-14
+## 2026-08-06
+
+### Added
+
+- Provide an alpine based image for version 12 (postfix `-alpine`).
+- Proivde an alpine based image without `demo-portal` and `opensearch` for version 12 (postfix `-alpine-slim`).
+- Proivde an ubuntu based image without `demo-portal` and `opensearch` for version 12 (postfix `-slim`).
+
+## 2026-08-05
 
 ### Added
 
 - Proivde an ubuntu based image without `demo-portal` and `opensearch` for version 14 (postfix `-slim`).
 
-## 20260-07-14
+## 2026-07-14
 
 ### Added
 
