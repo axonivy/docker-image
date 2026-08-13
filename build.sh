@@ -141,8 +141,8 @@ for file in "$buildContextDirectory"/Dockerfile.*; do
   fi
 
   MILESTONE_TAG=""
-  if [ "$(isDefaultVariant "$variant")" == "yes" ] && [ "$(isMilestoneRelease "$VERSION")" == "yes" ]; then
-    MILESTONE_TAG="--tag ${IMAGE}:milestone"
+  if [ "$(isMilestoneRelease "$VERSION")" == "yes" ]; then
+    MILESTONE_TAG="--tag ${IMAGE}:milestone$(buildTagPostfix $variant)"
     echo "tag milestone release with ${MILESTONE_TAG}"
   fi
 
