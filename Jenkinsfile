@@ -10,7 +10,7 @@ pipeline {
   parameters {
     string(name: 'version',
       defaultValue: 'dev',
-      description: 'version to build (dev, nightly, nightly-10, sprint, 8.0, 10.0, 11.2, ...)',
+      description: 'version to build (dev, nightly, nightly-10, 14.0.0-m8, 8.0, 10.0, 11.2, ...)',
       trim: true)
     booleanParam(name: 'triggerDockerScout', defaultValue: true)
   }

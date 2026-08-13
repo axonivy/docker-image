@@ -15,7 +15,7 @@ buildContext() {
     echo "11"
   elif [ $version == '12.0' ] || [ $version == 'nightly-12.0' ] || [ $version == '13.1' ] || [ $version == 'nightly-13.1' ] || [ $version == '13.2' ] || [ $version == 'nightly-13.2' ]; then
     echo "12"
-  else # when version = dev|nightly|sprint
+  else # when version = dev|nightly
     echo "14"
   fi
 }
@@ -30,10 +30,20 @@ isCurrentLTS() {
   fi
 }
 
+# if this is a milestone release (e.g. 14.0.0-m8), we add a 'milestone' tag
+isMilestoneRelease() {
+  version=$1
+  if [[ $version == *-m[0-9]* ]]; then
+    echo "yes"
+  else
+    echo "no"
+  fi
+}
+
 # if this is a official release, we add a 'version' tag (e.g. 8.0.3)
 isOfficialRelease() {
   version=$1
-  if [ $version == "dev" ] || [ $version == "nightly" ] || [ $version == "sprint" ] || [[ $version == nightly* ]]; then
+  if [ "$version" == "dev" ] || [ "$version" == "nightly" ] || [[ "$version" == nightly* ]] || [ "$(isMilestoneRelease "$version")" == "yes" ]; then
     echo "no"
   else
     echo "yes"
@@ -65,7 +75,8 @@ isDefaultVariant() {
 #--------------------------------------------------------------------------
 # builds the axonivy-engine image and push it to docker hub
 # param 1: version
-# -- dev, sprint, nightly   -> development builds without further tags
+# -- dev, nightly           -> development builds without further tags
+# -- 14.0.0-m8              -> milestone release -> Additional 'milestone' tag
 # -- 8.0                    -> LTS release -> Additional version tag e.g. 8.0.1
 # -- 9.1,9.2                -> LE release  -> Additional version tag e.g. 9.1.2
 # param 2: --push
@@ -129,11 +140,16 @@ for file in "$buildContextDirectory"/Dockerfile.*; do
     echo "tag official LTS release with ${LATEST_VERSION_TAG}"
   fi
 
+  MILESTONE_TAG=""
+  if [ "$(isDefaultVariant "$variant")" == "yes" ] && [ "$(isMilestoneRelease "$VERSION")" == "yes" ]; then
+    MILESTONE_TAG="--tag ${IMAGE}:milestone"
+    echo "tag milestone release with ${MILESTONE_TAG}"
+  fi
+
   docker buildx build --no-cache --pull \
-    --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} \
+    --tag ${IMAGE_TAG} ${FULL_VERSION_TAG} ${LATEST_VERSION_TAG} ${MILESTONE_TAG} \
     --build-arg IVY_ENGINE_DOWNLOAD_URL=${REDIRECTED_URL} \
     ${PUSHIT} \
     -f ${buildContextDirectory}/Dockerfile.${variant} \
     ${buildContextDirectory}
 done
-

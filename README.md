@@ -25,6 +25,7 @@ passing the param `--push`.
 
 ```bash
 ./build.sh dev
+./build.sh 14.0.0-m8
 ./build.sh 12.0
 ./build.sh 12.0.1
 ```
