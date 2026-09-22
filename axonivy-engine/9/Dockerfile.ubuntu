@@ -1,4 +1,4 @@
-FROM docker.io/eclipse-temurin:11-jre-focal
+FROM docker.io/eclipse-temurin:19-jre-focal
 LABEL maintainer="Axon Ivy AG <info@axonivy.com>" 
 
 ARG IVY_ENGINE_DOWNLOAD_URL
