@@ -10,7 +10,7 @@ pipeline {
   parameters {
     string name: 'version',
     defaultValue: 'dev',
-    description: 'version to analyze (dev, nightly, nightly-10, sprint, 8.0, 10.0, 11.2, ...)',
+    description: 'version to analyze (dev, nightly, nightly-10, milestone, 8.0, 10.0, 11.2, ...)',
     trim: true
   }
 
@@ -22,10 +22,13 @@ pipeline {
           currentBuild.description = "version: ${version}"
 
           def tags = [version]
-          if (version == 'dev' || version == 'sprint' || version == 'nightly') {
+          if (version == 'dev' || version == 'milestone' || version == 'nightly') {
             tags = [version, version + '-slim', version + '-alpine', version + '-alpine-slim']
           }
           if (version == '12.0' || version == 'nightly-12.0') {
+            tags = [version, version + '-slim', version + '-alpine', version + '-alpine-slim']
+          }
+          if (version == '14.0' || version == 'nightly-14.0') {
             tags = [version, version + '-slim', version + '-alpine', version + '-alpine-slim']
           }
 
