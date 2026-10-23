@@ -1,4 +1,4 @@
-[![LTS][1]][0] [![LTS][2]][0] [![Sprint][4]][0] [![Nightly][5]][0] [![Dev][6]][0]
+[![LTS][1]][0] [![LTS][2]][0] [![Milestone][3]][0] [![Nightly][4]][0] [![Dev][5]][0]
 
 # Axon Ivy Engine Docker Image
 
@@ -31,8 +31,8 @@ passing the param `--push`.
 ```
 
 [0]: https://hub.docker.com/r/axonivy/axonivy-engine/tags
-[1]: https://img.shields.io/badge/docker-12.0-green
-[2]: https://img.shields.io/badge/docker-10.0-green
-[4]: https://img.shields.io/badge/docker-sprint-yellow
-[5]: https://img.shields.io/badge/docker-nightly-orange
-[6]: https://img.shields.io/badge/docker-dev-red
+[1]: https://img.shields.io/badge/docker-14.0-green
+[2]: https://img.shields.io/badge/docker-12.0-green
+[3]: https://img.shields.io/badge/docker-milesone-orange
+[4]: https://img.shields.io/badge/docker-nightly-orange
+[5]: https://img.shields.io/badge/docker-dev-red
